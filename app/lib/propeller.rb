@@ -18,7 +18,7 @@ class Propeller
   # @param path [String] path to selected raw image
   # @param placement [Hash] placement of the image on the propeller display, including Width(w), Height(h), XOffset(x), YOffset(y)
   def image_loaded path, placement = {}
-    @processor.process path, args
+    @processor.process path, placement
   end
 
   # Notify interface about finished image processing
