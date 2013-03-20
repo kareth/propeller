@@ -1,4 +1,4 @@
 #!/bin/sh
 
-ln -s app/bin/proppeler proppeler
-chmod +x proppeler
+ln -s app/bin/propeller propeller
+chmod +x propeller
