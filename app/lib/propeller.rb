@@ -1,9 +1,8 @@
 class Propeller
   require 'propeller/image_processor'
-  require 'propeller/interface'
 
-  def initialize
-    @interface = Interface.new self
+  def initialize shoes
+    @interface = shoes
     @processor = ImageProcessor.new
   end
 

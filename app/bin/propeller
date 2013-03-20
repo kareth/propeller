@@ -4,11 +4,4 @@
 lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
 $LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
 
-require 'propeller'
-
-args = ARGV.dup
-ARGV.clear
-command = args.shift.strip rescue 'help'
-
-propeller = Propeller.new
-propeller.run(command, args)
+require 'ui'

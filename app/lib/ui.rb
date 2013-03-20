@@ -1,9 +1,7 @@
-class Propeller::Interface
+require 'propeller'
+require 'green_shoes'
 
-  def initialize propeller
-    @propeller = propeller
-  end
-
+Shoes.app do 
   # Triggered once user loads another image or change x/y/w/h params
   # @param path [String] path to loaded image
   # @param placement [Hash] hash with x/y/w/h placement info
@@ -39,4 +37,11 @@ class Propeller::Interface
   # Shows the interface
   def show
   end
+  
+  args = ARGV.dup
+  ARGV.clear
+  command = args.shift.strip rescue 'help'
+
+  @propeller = Propeller.new self
+  @propeller.run(command, args)
 end
