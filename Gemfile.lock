@@ -1,7 +1,10 @@
 GEM
+  remote: https://rubygems.org/
   specs:
+    shoes (3.0.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  shoes (~> 3.0.1)
