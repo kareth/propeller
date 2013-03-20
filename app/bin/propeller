@@ -5,10 +5,10 @@ lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
 $LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
 
 require 'propeller'
-require 'propeller/hello_world'
 
 args = ARGV.dup
 ARGV.clear
 command = args.shift.strip rescue 'help'
 
-Propeller.start(command, args)
+propeller = Propeller.new
+propeller.run(command, args)
