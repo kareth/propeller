@@ -7,8 +7,8 @@ describe Propeller::ImageProcessor do
 
   describe "#process" do
     it "should create new file for processed file" do
-      processed = propeller.image_loaded test_file
-      expect(File.exists?(processed)).to equal(true)
+      propeller.process_image test_file
+      expect(File.exists?(propeller.current_image)).to equal(true)
     end
 
     it "should not delete original image file"

@@ -3,8 +3,12 @@ class Propeller
   require 'propeller/interface'
 
   def initialize
-    @interface = Interface.new
+    @interface = Interface.new self
     @processor = ImageProcessor.new
+  end
+
+  def current_image
+    @current_image
   end
 
   # Runs chosen command
@@ -14,17 +18,12 @@ class Propeller
     @interface.show
   end
 
-  # Notify processor about pending file to process
+  # Process image stored on passed url
   # @param path [String] path to selected raw image
   # @param placement [Hash] placement of the image on the propeller display, including Width(w), Height(h), XOffset(x), YOffset(y)
-  def image_loaded path, placement = {}
-    @processor.process path, placement
-  end
-
-  # Notify interface about finished image processing
-  # @param path [String] path to processed image
-  def image_processed path
-    @interface.processed path
+  def process_image path, placement = {}
+    @current_image = @processor.process path, placement
+    @interface.processed @current_image
   end
 
   # Transmits information about selected image to propeller microprocessor
