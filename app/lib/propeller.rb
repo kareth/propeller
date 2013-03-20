@@ -12,8 +12,6 @@ class Propeller
   # @note In the future, it should take some kind of communication information as args
   def run command, args
     @interface.show
-    #puts "Command: '#{command}'"
-    #puts "Args: '#{args.join(", ")}'"
   end
 
   # Notify processor about pending file to process

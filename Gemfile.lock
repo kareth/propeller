@@ -1,10 +1,14 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    mini_magick (3.5.0)
+      subexec (~> 0.2.1)
+    subexec (0.2.2)
     yard (0.8.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  mini_magick
   yard
