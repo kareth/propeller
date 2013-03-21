@@ -5,15 +5,34 @@ WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 500
 PREVIEW_WIDTH = 400
 PREVIEW_HEIGHT = 400
-BACKGROUND = "#eee"
+BACKGROUND = "#eeeeee"
 
 Shoes.app :title => "Awesome Propeller", :width => WINDOW_WIDTH, :height => WINDOW_HEIGHT do 
   # Triggered once user loads another image or change x/y/w/h params
   # @param path [String] path to loaded image
   # @param placement [Hash] hash with x/y/w/h placement info
   def reload_image path, placement = {}
-    @propeller.image_loaded path, placement
+    @preview.path = "/home/blazi/apps/propeller/app/tmp/2013_03_21_100020WPKVERIC.jpeg"
+    puts @preview.path
+    
+#    unless path.nil?
+#      @propeller.process_image path, placement
+#      show_loader
+#    end
+  end
+  
+  def reload_text text, color 
+    @propeller.text_loaded text, color
     show_loader
+  end
+  
+  def reload_preview
+    puts @text.text.empty?
+    if @text.text.empty?
+      reload_image @preview.path, { :top => @offset_top.text, :left => @offset_left.text }
+    else
+      reload_text @text.text, @color
+    end
   end
 
   # Shows preview and unlocks UI actions
@@ -26,6 +45,9 @@ Shoes.app :title => "Awesome Propeller", :width => WINDOW_WIDTH, :height => WIND
   # Displays preview of processed image stored at path
   # @param path [String] path to image (processed for propeller)
   def show_preview path
+    puts path
+    puts @preview.path
+#    @preview.path = path
   end
 
   # Shows loading animation and blocks UI
@@ -48,44 +70,53 @@ Shoes.app :title => "Awesome Propeller", :width => WINDOW_WIDTH, :height => WIND
   @color = "#000000"
   
   stack :width => PREVIEW_WIDTH+30, :margin => 10 do
-    para em "Preview"
-    @preview = image "http://lorempixel.com/400/400/nightlife/",
+    para em("Preview"), :size => 16
+    @preview = image "/home/blazi/apps/propeller/app/tmp/2013_03_21_100020WPKVERIC.jpeg",
               :width => PREVIEW_WIDTH, :height => PREVIEW_HEIGHT
   end
   
-  stack :width => -PREVIEW_WIDTH-30, :margin => 10 do
-    para em "Settings"
+  @settings = stack :width => -PREVIEW_WIDTH-30, :margin => 10 do
+    para em("Settings"), :size => 16
+    
+    para strong("Source"), :size => 10
     
     button "Load image from file" do 
       path = ask_open_file 
-      @preview.path = path
-      reload_image(path)
+      reload_image path
     end
+    
     para "or input text to display", :margin_bottom => 0
     @text = edit_line
     flow do
+      @color_probe = rect :width => 20, :top => 198, :left => PREVIEW_WIDTH+150
       @pick_color = button "and pick color" do 
-        @color = ask_color 
+        @color = ask_color
+        @color_probe.style :fill => @color
       end
-      fill @color
-      @color_probe = rect :width => 20, :top => 0, :left => 0
     end
     
+    para strong("Offset"), :size => 10, :margin_top => 20
+    
     flow do
-      @width =  edit_line :width => 60
+      para 'Left', :width => 40, :margin_top => 5
+      @offset_left =  edit_line :width => 60
       para 'px', :width => 20, :margin_top => 5
-      strong(para 'x', :width => '40', :align => :center)
-      @width.focus
-      @height = edit_line :width => 60
+    end
+    flow do
+      para 'Top', :width => 40, :margin_top => 5
+      @offset_top = edit_line :width => 60
       para 'px', :width => 20, :margin_top => 5
-    end 
+    end
+    
+    button "Reload preview", :margin_top => 60 do 
+      reload_preview
+    end
+      
   end
   
   @text.click do
     @text.text = ''
   end
-  
-  @color_probe.style :top => @pick_color.top, :left => @pick_color.left + 80
   
   args = ARGV.dup
   ARGV.clear

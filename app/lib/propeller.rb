@@ -16,7 +16,7 @@ class Propeller
   def run command, args
     @interface.show
   end
-
+  
   # Process image stored on passed url
   # @param path [String] path to selected raw image
   # @param placement [Hash] placement of the image on the propeller display, including Width(w), Height(h), XOffset(x), YOffset(y)
