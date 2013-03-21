@@ -55,7 +55,7 @@ class Propeller::ImageProcessor
 
   # Generates path to store newly processed file
   def new_file_path
-    @processed_path ||= "#{store_dir}/#{filename}.jpeg"
+    @processed_path ||= "#{store_dir}/#{filename}.jpg"
   end
 
   # Generates random filename based on current time
