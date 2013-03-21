@@ -24,6 +24,10 @@ class Propeller
     @current_image = @processor.process path, placement
     @interface.processed @current_image
   end
+  
+  def process_text text, color = "#000000"
+    # TWOJA KOLEJ ZUREK
+  end
 
   # Transmits information about selected image to propeller microprocessor
   def transmit

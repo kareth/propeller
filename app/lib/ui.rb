@@ -12,22 +12,18 @@ Shoes.app :title => "Awesome Propeller", :width => WINDOW_WIDTH, :height => WIND
   # @param path [String] path to loaded image
   # @param placement [Hash] hash with x/y/w/h placement info
   def reload_image path, placement = {}
-    @preview.path = "/home/blazi/apps/propeller/app/tmp/2013_03_21_100020WPKVERIC.jpeg"
-    puts @preview.path
-    
-#    unless path.nil?
-#      @propeller.process_image path, placement
-#      show_loader
-#    end
+    unless path.nil?
+      @propeller.process_image path, placement
+      show_loader
+    end
   end
   
   def reload_text text, color 
-    @propeller.text_loaded text, color
+    @propeller.process_text text, color
     show_loader
   end
   
   def reload_preview
-    puts @text.text.empty?
     if @text.text.empty?
       reload_image @preview.path, { :top => @offset_top.text, :left => @offset_left.text }
     else
@@ -45,9 +41,11 @@ Shoes.app :title => "Awesome Propeller", :width => WINDOW_WIDTH, :height => WIND
   # Displays preview of processed image stored at path
   # @param path [String] path to image (processed for propeller)
   def show_preview path
-    puts path
-    puts @preview.path
-#    @preview.path = path
+    @preview.clear
+    @preview.remove
+    @preview_box.append do
+      @preview = image path, :width => 400, :height => 400
+    end
   end
 
   # Shows loading animation and blocks UI
@@ -69,9 +67,9 @@ Shoes.app :title => "Awesome Propeller", :width => WINDOW_WIDTH, :height => WIND
   background BACKGROUND
   @color = "#000000"
   
-  stack :width => PREVIEW_WIDTH+30, :margin => 10 do
+  @preview_box = stack :width => PREVIEW_WIDTH+30, :margin => 10 do
     para em("Preview"), :size => 16
-    @preview = image "/home/blazi/apps/propeller/app/tmp/2013_03_21_100020WPKVERIC.jpeg",
+    @preview = image "/home/blazi/apps/propeller/app/tmp/2013_03_21_100020WPKVERIC.jpg",
               :width => PREVIEW_WIDTH, :height => PREVIEW_HEIGHT
   end
   
@@ -112,10 +110,6 @@ Shoes.app :title => "Awesome Propeller", :width => WINDOW_WIDTH, :height => WIND
       reload_preview
     end
       
-  end
-  
-  @text.click do
-    @text.text = ''
   end
   
   args = ARGV.dup
