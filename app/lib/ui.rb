@@ -69,7 +69,7 @@ Shoes.app :title => "Awesome Propeller", :width => WINDOW_WIDTH, :height => WIND
   
   @preview_box = stack :width => PREVIEW_WIDTH+30, :margin => 10 do
     para em("Preview"), :size => 16
-    @preview = image "/home/blazi/apps/propeller/app/tmp/2013_03_21_100020WPKVERIC.jpg",
+    @preview = image File.expand_path("../spec/assets/test.jpg", Pathname(__FILE__).dirname.realpath),
               :width => PREVIEW_WIDTH, :height => PREVIEW_HEIGHT
   end
   
