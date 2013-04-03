@@ -23,6 +23,7 @@ GEM
       cairo (>= 1.10.0)
       glib2 (>= 1.2.5)
     pkg-config (1.1.4)
+    qtbindings (4.8.3.0)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -44,6 +45,7 @@ DEPENDENCIES
   chunky_png
   green_shoes
   mini_magick
+  qtbindings
   rspec
   rsvg2 (~> 1.2.3)
   yard
