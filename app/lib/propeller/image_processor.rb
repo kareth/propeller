@@ -1,35 +1,50 @@
 require 'mini_magick'
+require 'chunky_png'
 
 class Propeller::ImageProcessor
+  X_DIM = 186.8
+  Y_DIM = 23
 
   def initialize
     @angles = 360
-    @radius = 60
+    @outer_radius = 60
     @inner_radius = 20
   end
 
   # Change image to format readable by propeller display
   # @param path [String] path to orginal image
   # @param placement [Hash] hash with info about dimensions and offset
-  def process original_path, placement = {}
+  def process original_path, placement = {x: 0, y: 0, s: 100}
+    @original_path = original_path
     @placement = placement
-    @image = MiniMagick::Image.open(original_path)
-    do_full_processing
-    @image.write(new_file_path)
-    new_file_path
+    [@outer_radius..@inner_radius].map{ |radius| compute_radius radius }
   end
 
   def do_full_processing
-    position_and_pad
-    depolarize
-    skew
-    adjust_density
-    cut_box
-    resize
   end
 
-  # Converts image to square sized and pads empty space based on offset settings
-  def position_and_pad
+  # get all pixels on the circle of radius radius
+  def compute_radius radius
+    angle = Math.atan(Y_DIM/X_DIM) - Math.atan( (Y_DIM - 4.0 * (@outer_radius - radius)) / X_DIM)
+    @image = MiniMagick::Image.open(@original_path)
+    crop_square
+    rotate angle
+    depolarize
+    resize
+    read_row
+  end
+
+  # Cuts the square part of the image in selected position
+  def crop_square
+    position = @placement[:s] + "x" + @placement[:s] + "+" + @placement[:x] + "+" + @placement[:y]
+    @image.run_command("convert", @image.path, "-crop #{position}", @image.path)
+  end
+
+  # rotate
+  def rotate angle
+    @image.run_command("convert", @image.path, "-rotate #{360 - angle}", @image.path)
+    @image.run_command("convert", @image.path, "-gravity Center -crop #{@placement[:s]}x#{@placement[:s]}+0+0", @image.path)
+    # TODO Crop
   end
 
   # Decompose image to angular data
@@ -37,36 +52,14 @@ class Propeller::ImageProcessor
     @image.run_command("convert", @image.path, "-virtual-pixel Black -distort DePolar 0", @image.path)
   end
 
-  # Skew image to make it match our repositioned pixels
-  def skew
-  end
-
-  # Adjusts density of depolarized image
-  def adjust_density
-  end
-
-  # Cut rectangle out of created image (removing inner radius)
-  def cut_box
-  end
-
   # Resize image to dimensions necessary for propeller display, so each pixel will match one led
   def resize
+    @image.resize "#{@angles}x#{@outer_radius}\!"
   end
 
-  # Generates path to store newly processed file
-  def new_file_path
-    @processed_path ||= "#{store_dir}/#{filename}.jpg"
-  end
-
-  # Generates random filename based on current time
-  # @example
-  #   filename #=> "2013_03_20_144051JILWPERU"
-  def filename
-    Time.now.strftime("%Y_%m_%d_%H%M%S") + [*('A'..'Z')].sample(8).join
-  end
-
-  # Directory used to store images
-  def store_dir
-    File.expand_path "../../tmp/", Pathname(__FILE__).dirname.realpath
+  def read_row
+    @image.format('png')
+    p = ChunkyPNG::Image.from_io(StringIO.new(i.to_blob))
+    [0..p.width].map{ |x| p[x, radius] }
   end
 end

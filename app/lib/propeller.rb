@@ -16,7 +16,7 @@ class Propeller
   def run command, args
     @interface.show
   end
-  
+
   # Process image stored on passed url
   # @param path [String] path to selected raw image
   # @param placement [Hash] placement of the image on the propeller display, including Width(w), Height(h), XOffset(x), YOffset(y)
@@ -24,7 +24,7 @@ class Propeller
     @current_image = @processor.process path, placement
     @interface.processed @current_image
   end
-  
+
   def process_text text, color = "#000000"
     # TWOJA KOLEJ ZUREK
   end
