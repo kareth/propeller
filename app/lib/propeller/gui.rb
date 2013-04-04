@@ -129,11 +129,12 @@ class Propeller::Gui < Qt::Application
     
     def change_image
       path = @image_dialog.getOpenFileName
-      load_preview path
+      @interface.reload_image path, { :top => @y_offset.text, :left => @x_offset.text }
+      #load_preview path
     end
     
     def change_text
-      puts @text_input.text
+      @interface.reload_text @text_input.text
     end
     
     def pick_color

@@ -8,10 +8,16 @@ class Propeller::Interface
   
   def reload_image path, placement = {}
     show_loader
+    unless path.nil?
+      @propeller.process_image path, placement
+      show_loader
+    end
   end
+  
 
   def reload_text text, color
     show_loader
+    @propeller.process_text text, color
   end
 
   def reload_preview
@@ -27,6 +33,7 @@ class Propeller::Interface
   # Displays preview of processed image stored at path
   # @param path [String] path to image (processed for propeller)
   def show_preview path
+    @gui.load_preview path
   end
 
   # Shows loading animation and blocks UI
