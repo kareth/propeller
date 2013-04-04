@@ -96,7 +96,9 @@ class Propeller::Gui < Qt::Application
      
       
       # Text input
-      settings_layout.addWidget Qt::Label.new('or input text to display')
+      text_case_label = Qt::Label.new('or input text to display')
+      text_case_label.setStyleSheet "QLabel { margin-top: #{MARGIN_BIG}px; }"
+      settings_layout.addWidget text_case_label
       @text_input = Qt::LineEdit.new @window
       settings_layout.addWidget @text_input
       
