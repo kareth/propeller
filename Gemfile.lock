@@ -1,8 +1,6 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    atk (1.2.5)
-      glib2 (>= 1.2.5)
     cairo (1.12.4)
       pkg-config
     chunky_png (1.2.8)
@@ -11,19 +9,14 @@ GEM
       glib2 (>= 1.2.5)
     glib2 (1.2.5)
       pkg-config
-    green_shoes (1.1.373)
-      gtk2
-    gtk2 (1.2.5)
-      atk (>= 1.2.5)
-      gdk_pixbuf2 (>= 1.2.5)
-      pango (>= 1.2.5)
+    gosu (0.7.47.1)
+    json (1.7.7)
     mini_magick (3.5.0)
       subexec (~> 0.2.1)
-    pango (1.2.5)
-      cairo (>= 1.10.0)
-      glib2 (>= 1.2.5)
+    mkrf (0.2.3)
     pkg-config (1.1.4)
     qtbindings (4.8.3.0)
+    rake (10.0.4)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -35,6 +28,9 @@ GEM
     rsvg2 (1.2.5)
       cairo (>= 1.10.0)
       gdk_pixbuf2 (>= 1.2.5)
+    ruby-opengl2 (0.60.6)
+      mkrf (>= 0.2.3)
+      rake (>= 10.0)
     subexec (0.2.2)
     yard (0.8.5.2)
 
@@ -43,9 +39,12 @@ PLATFORMS
 
 DEPENDENCIES
   chunky_png
-  green_shoes
+  gosu
+  json
   mini_magick
+  mkrf
   qtbindings
   rspec
   rsvg2 (~> 1.2.3)
+  ruby-opengl2
   yard
