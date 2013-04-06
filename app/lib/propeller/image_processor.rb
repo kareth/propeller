@@ -3,7 +3,7 @@ require 'chunky_png'
 
 class Propeller::ImageProcessor
   X_DIM = 186.8
-  Y_DIM = 23
+  Y_DIM = 23.0
 
   def initialize
     @angles = 360
@@ -14,10 +14,17 @@ class Propeller::ImageProcessor
   # Change image to format readable by propeller display
   # @param path [String] path to orginal image
   # @param placement [Hash] hash with info about dimensions and offset
-  def process original_path, placement = {x: 0, y: 0, s: 100}
+  def process original_path, placement
     @original_path = original_path
     @placement = placement
-    [@outer_radius..@inner_radius].map{ |radius| compute_radius radius }
+    fill_placement
+    (@inner_radius...@outer_radius).to_a.map{ |radius| compute_radius radius }
+  end
+
+  def fill_placement
+    @placement[:s] ||= 200
+    @placement[:x] ||= 0
+    @placement[:y] ||= 0
   end
 
   def do_full_processing
@@ -31,12 +38,13 @@ class Propeller::ImageProcessor
     rotate angle
     depolarize
     resize
-    read_row
+    read_row radius
   end
 
   # Cuts the square part of the image in selected position
   def crop_square
-    position = @placement[:s] + "x" + @placement[:s] + "+" + @placement[:x] + "+" + @placement[:y]
+    p @placement
+    position = "#{@placement[:s]}x#{@placement[:s]}+#{@placement[:x]}+#{@placement[:y]}"
     @image.run_command("convert", @image.path, "-crop #{position}", @image.path)
   end
 
@@ -57,9 +65,11 @@ class Propeller::ImageProcessor
     @image.resize "#{@angles}x#{@outer_radius}\!"
   end
 
-  def read_row
+  def read_row radius
     @image.format('png')
-    p = ChunkyPNG::Image.from_io(StringIO.new(i.to_blob))
-    [0..p.width].map{ |x| p[x, radius] }
+    p = ChunkyPNG::Image.from_io(StringIO.new(@image.to_blob))
+    a = (0...p.width).to_a.map{ |x| p[x, radius] }
+    p a[1..10]
+    a
   end
 end
