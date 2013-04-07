@@ -72,4 +72,30 @@ class Propeller::ImageProcessor
     p a[1..10]
     a
   end
+  
+  def generate_preview pixels, radius=200
+    preview = MiniMagick::Image.create "png", false do |p|
+      p.size "#{radius*2}x#{radius*2}"
+      p.canvas "black"
+    end
+    
+    center = radius,radius
+    
+    step = radius / pixels.length
+    pixels.each do |circle|
+      circle.each_with_index do |pixel, alfa|
+        rgba = pixel.to_s(16)
+        start_point = [radius * Math.sin(alfa) + center[0], radius * Math.cos(alfa) + center[1]]
+        end_point = [radius * Math.sin(alfa+1) + center[0], radius * Math.cos(alfa+1) + center[1]]
+        preview.combine_options do |p|
+          p.fill "##{rgba}"
+          p.draw "path 'M #{center.join(',')} L #{start_point.join(',')} A 50,50 0 0,1 #{end_point.join(',')} Z'"        
+        end
+      end
+      radius -= step
+    end
+    
+    preview.write('preview.png')
+    
+  end
 end

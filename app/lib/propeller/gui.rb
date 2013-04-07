@@ -129,7 +129,7 @@ class Propeller::Gui < Qt::Application
 
     def change_image
       path = @image_dialog.getOpenFileName
-      @interface.reload_image path, { :top => @y_offset.text, :left => @x_offset.text }
+      @interface.reload_image path, { :y => @y_offset.text.to_i, :x => @x_offset.text.to_i }
       #load_preview path
     end
 
