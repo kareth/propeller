@@ -20,7 +20,7 @@ class Propeller::ImageProcessor
     fill_placement
     res = (@inner_radius...@outer_radius).to_a.map{ |radius| compute_radius radius }
     generate_preview res
-    # generate_preview multicolor_preview
+#    generate_preview multicolor_preview
   end
 
   def fill_placement
@@ -76,29 +76,30 @@ class Propeller::ImageProcessor
   end
   
   def generate_preview pixels, radius=200
-#    preview = MiniMagick::Image.create "png", false do |p|
-#      p.size "#{radius*2}x#{radius*2}"
-#      p.canvas "black"
-#    end
     bg_path = File.expand_path("../../assets/preview_bg.png", Pathname(__FILE__).dirname.realpath)
     preview = MiniMagick::Image.open(bg_path)
     
     center = radius,radius
     
-    step = radius / pixels.length
+    step = radius.to_f / (@outer_radius)
     pixels.each do |circle|
       puts "radius: #{radius}"
       circle.each_with_index do |pixel, alfa|
         rgba = pixel.to_s(16)
+        rgba = '0'*(8-rgba.size) + rgba
         # puts "color: #{rgba}, alfa: #{alfa}"
-        start_point = [radius * Math.sin(alfa) + center[0], radius * Math.cos(alfa) + center[1]]
-        end_point = [radius * Math.sin(alfa+1) + center[0], radius * Math.cos(alfa+1) + center[1]]
+        start_point = [radius.to_f * Math.sin(alfa) + center[0], radius.to_f * Math.cos(alfa) + center[1]]
+        end_point = [radius.to_f * Math.sin(alfa+1) + center[0], radius.to_f * Math.cos(alfa+1) + center[1]]
         preview.combine_options do |p|
           p.fill "##{rgba}"
           p.draw "path 'M #{center.join(',')} L #{start_point.join(',')} A 50,50 0 0,1 #{end_point.join(',')} Z'"        
         end
       end
       radius -= step
+    end
+    preview.combine_options do |p|
+      p.fill "#ffffffff"
+      p.draw "translate #{center.join(',')} circle 0,0 #{@radius},0"        
     end
     
     preview.write('preview.png')
