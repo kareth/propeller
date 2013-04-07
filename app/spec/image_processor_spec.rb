@@ -2,7 +2,7 @@ require 'propeller'
 require 'propeller/image_processor'
 
 describe Propeller::ImageProcessor do
-  let(:propeller){ Propeller.new }
+  let(:propeller){ Propeller.new [] }
   let(:test_file){ File.expand_path "assets/test.jpg", Pathname(__FILE__).dirname.realpath }
 
   describe "#process" do

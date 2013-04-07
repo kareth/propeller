@@ -18,7 +18,9 @@ class Propeller::ImageProcessor
     @original_path = original_path
     @placement = placement
     fill_placement
-    (@inner_radius...@outer_radius).to_a.map{ |radius| compute_radius radius }
+    res = (@inner_radius...@outer_radius).to_a.map{ |radius| compute_radius radius }
+    generate_preview res
+    # generate_preview multicolor_preview
   end
 
   def fill_placement
@@ -74,17 +76,21 @@ class Propeller::ImageProcessor
   end
   
   def generate_preview pixels, radius=200
-    preview = MiniMagick::Image.create "png", false do |p|
-      p.size "#{radius*2}x#{radius*2}"
-      p.canvas "black"
-    end
+#    preview = MiniMagick::Image.create "png", false do |p|
+#      p.size "#{radius*2}x#{radius*2}"
+#      p.canvas "black"
+#    end
+    bg_path = File.expand_path("../../assets/preview_bg.png", Pathname(__FILE__).dirname.realpath)
+    preview = MiniMagick::Image.open(bg_path)
     
     center = radius,radius
     
     step = radius / pixels.length
     pixels.each do |circle|
+      puts "radius: #{radius}"
       circle.each_with_index do |pixel, alfa|
         rgba = pixel.to_s(16)
+        # puts "color: #{rgba}, alfa: #{alfa}"
         start_point = [radius * Math.sin(alfa) + center[0], radius * Math.cos(alfa) + center[1]]
         end_point = [radius * Math.sin(alfa+1) + center[0], radius * Math.cos(alfa+1) + center[1]]
         preview.combine_options do |p|
@@ -96,6 +102,14 @@ class Propeller::ImageProcessor
     end
     
     preview.write('preview.png')
-    
+  end
+  
+  def multicolor_preview
+    tab = []
+    40.times do |i|
+      color = if i.even? then "ffff00ff".to_i(16) else "ff0000ff".to_i(16) end
+      tab << [color]*360
+    end
+    tab
   end
 end
