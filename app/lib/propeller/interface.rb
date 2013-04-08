@@ -34,7 +34,7 @@ class Propeller::Interface
   # @param path [String] path to image (processed for propeller)
   def show_preview path
     #TODO another preview
-    #@gui.load_preview path
+    @gui.load_preview path
   end
 
   # Shows loading animation and blocks UI

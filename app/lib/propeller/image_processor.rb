@@ -79,32 +79,47 @@ class Propeller::ImageProcessor
     bg_path = File.expand_path("../../assets/preview_bg.png", Pathname(__FILE__).dirname.realpath)
     preview = MiniMagick::Image.open(bg_path)
     
+    # White hole
+    pixels << ["ffffffff".to_i(16)]*360
+    
     center = radius,radius
+    
+    commands = [] # Commands buffer
     
     step = radius.to_f / (@outer_radius)
     pixels.each do |circle|
       puts "radius: #{radius}"
+      
       circle.each_with_index do |pixel, alfa|
+      
         rgba = pixel.to_s(16)
+        # Fill color with '0' from left side
         rgba = '0'*(8-rgba.size) + rgba
-#        puts "#{alfa}-#{alfa+1}: ##{rgba}"
+        
         rad1 = alfa.to_f * Math::PI / 180
         rad2 = (alfa+1).to_f * Math::PI / 180
         start_point = [radius.to_f * Math.sin(rad1) + center[0], radius.to_f * Math.cos(rad1) + center[1]]
         end_point = [radius.to_f * Math.sin(rad2) + center[0], radius.to_f * Math.cos(rad2) + center[1]]
-        preview.combine_options do |p|
-          p.fill "##{rgba}"
-          p.draw "path 'M #{center.join(',')} L #{start_point.join(',')} A 50,50 0 0,1 #{end_point.join(',')} Z'"        
+        
+        commands << ["fill", "##{rgba}"] # Fill with pixel color
+        commands << ["draw", "path 'M #{center.join(',')} L #{start_point.join(',')} A 50,50 0 0,1 #{end_point.join(',')} Z'"] # Draw pixel
+        
+      end
+      
+      # Perform commands from buffer
+      preview.combine_options do |p|
+        commands.each do |command,arg|
+          p.send command, arg
         end
       end
+      commands.clear
+      
       radius -= step
-    end
-    preview.combine_options do |p|
-      p.fill "#ffffffff"
-      p.draw "translate #{center.join(',')} circle 0,0 #{@radius},0"        
     end
     
     preview.write('preview.png')
+    
+    File.expand_path 'preview.png', Dir.pwd
   end
   
   def multicolor_preview
