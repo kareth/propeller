@@ -87,9 +87,11 @@ class Propeller::ImageProcessor
       circle.each_with_index do |pixel, alfa|
         rgba = pixel.to_s(16)
         rgba = '0'*(8-rgba.size) + rgba
-        # puts "color: #{rgba}, alfa: #{alfa}"
-        start_point = [radius.to_f * Math.sin(alfa) + center[0], radius.to_f * Math.cos(alfa) + center[1]]
-        end_point = [radius.to_f * Math.sin(alfa+1) + center[0], radius.to_f * Math.cos(alfa+1) + center[1]]
+#        puts "#{alfa}-#{alfa+1}: ##{rgba}"
+        rad1 = alfa.to_f * Math::PI / 180
+        rad2 = (alfa+1).to_f * Math::PI / 180
+        start_point = [radius.to_f * Math.sin(rad1) + center[0], radius.to_f * Math.cos(rad1) + center[1]]
+        end_point = [radius.to_f * Math.sin(rad2) + center[0], radius.to_f * Math.cos(rad2) + center[1]]
         preview.combine_options do |p|
           p.fill "##{rgba}"
           p.draw "path 'M #{center.join(',')} L #{start_point.join(',')} A 50,50 0 0,1 #{end_point.join(',')} Z'"        
@@ -108,8 +110,14 @@ class Propeller::ImageProcessor
   def multicolor_preview
     tab = []
     40.times do |i|
-      color = if i.even? then "ffff00ff".to_i(16) else "ff0000ff".to_i(16) end
-      tab << [color]*360
+      if i.even?
+        color1 = "ffff00ff".to_i(16)
+        color2 = "00ff00ff".to_i(16)
+      else
+        color1 = "ff0000ff".to_i(16)
+        color2 = "0000ffff".to_i(16)
+      end
+      tab << [color1]*180 + [color2]*180
     end
     tab
   end
