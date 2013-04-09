@@ -79,6 +79,8 @@ class Propeller::ImageProcessor
     bg_path = File.expand_path("../../assets/preview_bg.png", Pathname(__FILE__).dirname.realpath)
     preview = MiniMagick::Image.open(bg_path)
     
+    pixels.reverse!
+    
     # White hole
     pixels << ["ffffffff".to_i(16)]*360
     
@@ -89,7 +91,7 @@ class Propeller::ImageProcessor
     step = radius.to_f / (@outer_radius)
     pixels.each do |circle|
       puts "radius: #{radius}"
-      
+      circle.rotate! 180
       circle.each_with_index do |pixel, alfa|
       
         rgba = pixel.to_s(16)
@@ -119,7 +121,7 @@ class Propeller::ImageProcessor
     
     preview.write('preview.png')
     
-    File.expand_path 'preview.png', Dir.pwd
+    File.absolute_path 'preview.png'
   end
   
   def multicolor_preview
