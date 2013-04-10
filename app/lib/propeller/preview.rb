@@ -1,9 +1,12 @@
+# Class userd to generate preview based on propeller data
 class Preview
   def initialize
   end
 
-  # Preview
-
+  # Generates preview image based on propeller data
+  # @param pixels [Array] Matrix of pixels generated to be displayed on robot
+  # @param radius [Integer] Size of output image
+  # @return [String] Absolute path to preview image
   def generate pixels, radius=200
     bg_path = File.expand_path("../../assets/preview_bg.png", Pathname(__FILE__).dirname.realpath)
     preview = MiniMagick::Image.open(bg_path)
@@ -52,6 +55,8 @@ class Preview
     File.absolute_path 'preview.png'
   end
 
+  # Method used to generate some stripped pattern
+  # @note this method is not used anywhere, but maybe useful later on
   def multicolor_preview
     tab = []
     40.times do |i|
