@@ -1,3 +1,4 @@
+# class used as interface for windows interface, allowing communication with propeller class
 class Propeller::Interface
   require 'propeller/windows'
 
@@ -6,6 +7,9 @@ class Propeller::Interface
     @windows = Propeller::Windows.new args, self
   end
 
+  # Orders propeller to start processing image selected by user including propeller data generation and preview rendering
+  # @param path [String] path to image specified by user
+  # @param placement [Hash] pacement hash specified by user, including X offset(x), Y offset(y) and diameter size (s)
   def reload_image path, placement = {}
     show_loader
     @propeller.process_image path, placement unless path.nil?
@@ -18,13 +22,13 @@ class Propeller::Interface
   end
 
   # Shows preview and unlocks UI actions
-  # @param path [String] path to processed image
+  # @param path [String] path to processed preview image
   def processed path
     show_preview path
     hide_loader
   end
 
-  # Displays preview of processed image stored at path
+  # Displays preview of processed preview image stored at path
   # @param path [String] path to image (processed for propeller)
   def show_preview path
     @windows.load_preview path

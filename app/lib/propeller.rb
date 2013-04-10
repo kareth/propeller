@@ -1,3 +1,4 @@
+# Main class used to communicate between all modules
 class Propeller
   require 'propeller/image_processor'
   require 'propeller/interface'
@@ -33,6 +34,8 @@ class Propeller
     @interface.processed @preview
   end
 
+  # Process text specified by user
+  # @note not used by far
   def process_text text, color = "#000000"
   end
 

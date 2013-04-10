@@ -2,8 +2,10 @@ require 'mini_magick'
 require 'chunky_png'
 require 'propeller/dimensions'
 
+# Main image processor, converting image to matrix of pixels to display on robot
 class Propeller::ImageProcessor
-  PLACEMENT = {x: 0, y: 0, s: 200}
+  PLACEMENT = {x: 0, y: 0, s: 200} # Default placement hash
+
   def initialize
     @angles = 360
   end
@@ -11,7 +13,7 @@ class Propeller::ImageProcessor
   # Change image to format readable by propeller display
   # @param path [String] path to orginal image
   # @param placement [Hash] hash with info about dimensions and offset
-  # @returns [Array[][]] matrix of pixels to display by propeller [distance][angle]
+  # @return [Array] matrix of pixels to display by propeller [distance][angle]
   def process original_path, placement
     @original_path = original_path
     @placement = PLACEMENT.merge placement
