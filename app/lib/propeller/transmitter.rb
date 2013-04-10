@@ -1,0 +1,51 @@
+require 'serialport'
+
+class Propeller::Transmiter
+  SPEED = 115200
+  
+  # Connects with specified serial port
+  # @port [String] - Serial port descriptor i.e /dev/rfcomm0
+  def connect port
+    @sp = SerialPort.new port, SPEED
+  end
+  
+  
+  # Transmit image given in 2d array to propeller
+  # using chosen serial port
+  # @pixels [Array[Array]] - array of hexadecimal pixels values
+  def transmit pixels
+    data = compress convert data
+    @sp.write data
+  end
+  
+  # Disconnect serial port
+  def disconnect
+    @sp.close
+  end  
+  
+  private
+    # Upscales value from 8 bit to 12 bit
+    # @value [Integer]
+    def upscale value
+      (value / 255.0 * 4095.0).to_i % 4096
+    end
+    
+    # Convert 2d array of pixels to flatten thirds of r,g,b
+    # values of each pixel in 
+    # @data [Array[Array]] - Array of image pixel values in rgba format
+    # @return [Array] - Flatten thirds of decimal r,g,b values
+    def convert data
+      pixels.transpose.flatten.map do |pixel| 
+        pixel = pixel.to_i(16)/256
+        pixel.to_s(16).rjust(6,'0').scan(/.{2}/).first(3).map { |b| b.to_i(16) }
+      end.flatten
+    end
+   
+    # Compress array of r,g,b values to 8bit values ready to send to propeller
+    # @data [Array] - array of decimal r,g,b values
+    # @retrun [Array] - array of 8bit values ready to send to propeller 
+    def compress data
+      data.map { |v| upscale(v).to_s(2).rjust(12, '0')}.join.scan(/.{8}/).map{ |v| v.to_i(2)}
+    end
+  
+end
