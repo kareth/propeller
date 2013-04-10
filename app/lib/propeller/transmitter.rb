@@ -17,7 +17,6 @@ class Propeller::Transmitter
   def transmit pixels
     pixels = compress convert pixels
     pixels.each { |pixel| @sp.write pixel.chr }
-#    @sp.write pixels
   end
   
   # Disconnect serial port
