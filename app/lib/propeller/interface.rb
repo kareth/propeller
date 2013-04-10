@@ -56,7 +56,8 @@ class Propeller::Interface
   def connect_device path
     @propeller.connect_device path
   end
-  
+
+  # Start sending data to propeller device
   def send_data
     @propeller.transmit
   end

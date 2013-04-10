@@ -1,7 +1,8 @@
 require 'serialport'
 
+# Class responsible for data transmition between propeller device and application
 class Propeller::Transmitter
-  SPEED = 115200
+  SPEED = 115200 # Data transmition speed in bits / second
   
   # Connects with specified serial port
   # @param port [String] - Serial port descriptor i.e /dev/rfcomm0

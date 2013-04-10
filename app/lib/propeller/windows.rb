@@ -24,6 +24,8 @@ class Propeller::Windows < Qt::Application
     @image_dialog.setNameFilter "Images (*.png *.jpeg *.jpg *.gif)"
   end
 
+  # Loads image to preview part
+  # @param path - Path to preview image
   def load_preview path
     pixmap = Qt::Pixmap.new path
     pixmap = pixmap.scaled Qt::Size.new(PREVIEW_WIDTH,PREVIEW_HEIGHT)
@@ -32,6 +34,7 @@ class Propeller::Windows < Qt::Application
   end
 
   private
+    # Sets GUI interface
     def init_gui_elements
       @window = Qt::Widget.new
       @window.resize WINDOW_WIDTH,WINDOW_HEIGHT
@@ -143,33 +146,39 @@ class Propeller::Windows < Qt::Application
       @window.show
     end
 
+    # Centers window main window
     def center_window
       desktop = Qt::DesktopWidget.new
       x = (desktop.width - WINDOW_WIDTH) / 2
       y = (desktop.height - WINDOW_HEIGHT) / 2
       @window.move x, y
     end
-
+    
+    # Triggered on change image button click
     def change_image
       path = @image_dialog.getOpenFileName
       @interface.reload_image path, { :y => @y_offset.text.to_i, :x => @x_offset.text.to_i }
       #load_preview path
     end
 
+    # Triggered on load text button click
     def change_text
       @interface.reload_text @text_input.text
     end
 
+    # Open dialog to choose text color
     def pick_color
       dialog = Qt::ColorDialog.new @window
       color = dialog.getColor
       @color_probe.update_color color
     end
     
+    # Triggered on connect device button click   
     def connect_device
       @interface.connect_device @device_port.text
     end
     
+    # Triggered on send data button click
     def send_data
       @interface.send_data
     end
