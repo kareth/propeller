@@ -9,14 +9,11 @@ GEM
       glib2 (>= 1.2.5)
     glib2 (1.2.5)
       pkg-config
-    gosu (0.7.47.1)
-    json (1.7.7)
     mini_magick (3.5.0)
       subexec (~> 0.2.1)
-    mkrf (0.2.3)
     pkg-config (1.1.4)
     qtbindings (4.8.3.0)
-    rake (10.0.4)
+    redcarpet (2.2.2)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -28,9 +25,6 @@ GEM
     rsvg2 (1.2.5)
       cairo (>= 1.10.0)
       gdk_pixbuf2 (>= 1.2.5)
-    ruby-opengl2 (0.60.6)
-      mkrf (>= 0.2.3)
-      rake (>= 10.0)
     subexec (0.2.2)
     yard (0.8.5.2)
 
@@ -39,12 +33,9 @@ PLATFORMS
 
 DEPENDENCIES
   chunky_png
-  gosu
-  json
   mini_magick
-  mkrf
   qtbindings
+  redcarpet
   rspec
   rsvg2 (~> 1.2.3)
-  ruby-opengl2
   yard

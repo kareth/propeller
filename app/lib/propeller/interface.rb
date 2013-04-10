@@ -50,4 +50,15 @@ class Propeller::Interface
   def show
     @windows.exec
   end
+  
+  # Connects with serial port
+  # @param path [String] - deivce to connect with
+  def connect_device path
+    @propeller.connect_device path
+  end
+  
+  def send_data
+    @propeller.transmit
+  end
+  
 end

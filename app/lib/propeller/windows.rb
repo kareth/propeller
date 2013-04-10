@@ -3,7 +3,8 @@ require 'propeller/rectangle'
 
 # Class responsible for displaying windows using QT
 class Propeller::Windows < Qt::Application
-  slots :change_image, :change_text, :pick_color
+  slots :change_image, :change_text, :pick_color, 
+        :connect_device, :send_data
 
   WINDOW_WIDTH = 650
   WINDOW_HEIGHT = 500
@@ -54,7 +55,6 @@ class Propeller::Windows < Qt::Application
       preview_layout.addWidget @image
       load_preview IMAGE_PLACEHOLDER
 
-
       # Settings part
       settings_layout = Qt::VBoxLayout.new
       settings_layout.setAlignment Qt::AlignTop
@@ -65,6 +65,23 @@ class Propeller::Windows < Qt::Application
       settings_label.setStyleSheet "QLabel { margin-bottom: #{MARGIN}px; font-weight: bold; }"
       settings_layout.addWidget settings_label
 
+      # Propeller connection
+      propeller_label = Qt::Label.new "Device"
+      propeller_label.setStyleSheet "QLabel { font-style: italic; font-size: 0.9em; margin-bottom: #{MARGIN}px; }"
+      settings_layout.addWidget propeller_label
+
+      device_layout = Qt::HBoxLayout.new 
+      port_label = Qt::Label.new "Device port"
+      @device_port = Qt::LineEdit.new
+      device_layout.addWidget port_label
+      device_layout.addWidget @device_port
+      
+      settings_layout.addLayout device_layout
+      
+      @connect_button = Qt::PushButton.new "Connect", @window
+      Qt::Object.connect(@connect_button, SIGNAL(:clicked), self, SLOT(:connect_device))
+      settings_layout.addWidget @connect_button
+      
       # Offset
       offset_label = Qt::Label.new "Offset"
       offset_label.setStyleSheet "QLabel { font-style: italic; font-size: 0.9em; margin-bottom: #{MARGIN}px; }"
@@ -117,6 +134,11 @@ class Propeller::Windows < Qt::Application
       @text_button = Qt::PushButton.new 'Load text', @window
       Qt::Object.connect(@text_button, SIGNAL(:clicked), self, SLOT(:change_text))
       settings_layout.addWidget @text_button
+      
+      # Send to propeller
+      @send_button = Qt::PushButton.new 'Send to propeller', @window
+      Qt::Object.connect(@send_button, SIGNAL(:clicked), self, SLOT(:send_data))
+      settings_layout.addWidget @send_button
 
       @window.show
     end
@@ -143,4 +165,13 @@ class Propeller::Windows < Qt::Application
       color = dialog.getColor
       @color_probe.update_color color
     end
+    
+    def connect_device
+      @interface.connect_device @device_port.text
+    end
+    
+    def send_data
+      @interface.send_data
+    end
+    
 end

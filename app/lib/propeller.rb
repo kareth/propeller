@@ -3,6 +3,7 @@ class Propeller
   require 'propeller/image_processor'
   require 'propeller/interface'
   require 'propeller/preview'
+  require 'propeller/transmitter'
 
   # Initializes propeller class ith external processors:
   # @note interface - managing data being sent to and from user
@@ -12,6 +13,13 @@ class Propeller
     @interface = Interface.new args, self
     @propeller_processor = ImageProcessor.new
     @preview_processor = Preview.new
+    @transmitter = Transmitter.new
+  end
+  
+  # Connect transmitter with given serial port
+  # @param port [String] - port to connect with i.e. /dev/rfcomm0
+  def connect_device port
+    @transmitter.connect port
   end
 
   # Runs chosen command
@@ -41,6 +49,7 @@ class Propeller
 
   # Transmits information about selected image to propeller microprocessor
   def transmit
+    @transmitter.transmit @propeller_data
   end
 
   # Stops the propeller machine
