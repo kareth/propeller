@@ -1,6 +1,7 @@
 require 'Qt4'
 require 'propeller/rectangle'
 
+# Class responsible for displaying windows using QT
 class Propeller::Windows < Qt::Application
   slots :change_image, :change_text, :pick_color
 
