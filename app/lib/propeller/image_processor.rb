@@ -11,7 +11,7 @@ class Propeller::ImageProcessor
   end
 
   # Change image to format readable by propeller display
-  # @param path [String] path to orginal image
+  # @param original_path [String] path to orginal image
   # @param placement [Hash] hash with info about dimensions and offset
   # @return [Array] matrix of pixels to display by propeller [distance][angle]
   def process original_path, placement
@@ -22,7 +22,7 @@ class Propeller::ImageProcessor
 
   # Get all pixels on the circle of radius 'radius' to display on propeller
   # @param radius [Integer] index of diode to fetch row for
-  # @returns [Array] array of pixels - one pixel for each angle for given diode
+  # @return [Array] array of pixels - one pixel for each angle for given diode
   def compute_radius radius
     angle = Math.atan(Y_DIM/X_DIM) - Math.atan( (Y_DIM - D_DIST * (OUTER - radius)) / X_DIM)
     @image = MiniMagick::Image.open(@original_path)
