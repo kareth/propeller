@@ -16,7 +16,8 @@ class Propeller::Transmitter
   # @param pixels [Array[Array]] - array of hexadecimal pixels values
   def transmit pixels
     pixels = compress convert pixels
-    @sp.write pixels
+    pixels.each { |pixel| @sp.write pixel.chr }
+#    @sp.write pixels
   end
   
   # Disconnect serial port
