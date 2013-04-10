@@ -1,7 +1,7 @@
 require 'Qt4'
 require 'propeller/rectangle'
 
-class Propeller::Gui < Qt::Application
+class Propeller::Windows < Qt::Application
   slots :change_image, :change_text, :pick_color
 
   WINDOW_WIDTH = 650

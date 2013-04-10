@@ -1,15 +1,16 @@
 class Propeller
   require 'propeller/image_processor'
   require 'propeller/interface'
+  require 'propeller/preview'
 
+  # Initializes propeller class ith external processors:
+  # @note interface - managing data being sent to and from user
+  # @note propeller_processor - processing image to data readable by robot
+  # @note preview_processor - generating preview image basing on propeller data
   def initialize args
-#    @interface = shoes
     @interface = Interface.new args, self
-    @processor = ImageProcessor.new
-  end
-
-  def current_image
-    @current_image
+    @propeller_processor = ImageProcessor.new
+    @preview_processor = Preview.new
   end
 
   # Runs chosen command
@@ -19,16 +20,20 @@ class Propeller
     @interface.show
   end
 
-  # Process image stored on passed url
+  # Process image stored in passed url
   # @param path [String] path to selected raw image
   # @param placement [Hash] placement of the image on the propeller display, including Width(w), Height(h), XOffset(x), YOffset(y)
   def process_image path, placement = {}
-    @current_image = @processor.process path, placement
-    @interface.processed @current_image
+    p 'Generating propeller data...'
+    @propeller_data = @propeller_processor.process path, placement
+
+    p 'Generating preview...'
+    @preview = @preview_processor.generate @propeller_data
+
+    @interface.processed @preview
   end
 
   def process_text text, color = "#000000"
-    # TWOJA KOLEJ ZUREK
   end
 
   # Transmits information about selected image to propeller microprocessor

@@ -1,26 +1,20 @@
 class Propeller::Interface
-  require 'propeller/gui'
+  require 'propeller/windows'
 
   def initialize args, propeller
     @propeller = propeller
-    @gui = Propeller::Gui.new args, self
+    @windows = Propeller::Windows.new args, self
   end
 
   def reload_image path, placement = {}
     show_loader
-    unless path.nil?
-      @propeller.process_image path, placement
-      show_loader
-    end
+    @propeller.process_image path, placement unless path.nil?
   end
 
-
+  # pending
   def reload_text text, color
     show_loader
     @propeller.process_text text, color
-  end
-
-  def reload_preview
   end
 
   # Shows preview and unlocks UI actions
@@ -33,8 +27,7 @@ class Propeller::Interface
   # Displays preview of processed image stored at path
   # @param path [String] path to image (processed for propeller)
   def show_preview path
-    #TODO another preview
-    @gui.load_preview path
+    @windows.load_preview path
   end
 
   # Shows loading animation and blocks UI
@@ -51,6 +44,6 @@ class Propeller::Interface
 
   # Shows the interface
   def show
-    @gui.exec
+    @windows.exec
   end
 end
