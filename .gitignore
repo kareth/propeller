@@ -3,3 +3,4 @@ doc/
 .yardoc/
 app/tmp/*
 !app/tmp/.dontignore
+bluetooth.sh
