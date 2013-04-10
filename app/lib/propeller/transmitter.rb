@@ -14,8 +14,8 @@ class Propeller::Transmitter
   # using chosen serial port
   # @param pixels [Array[Array]] - array of hexadecimal pixels values
   def transmit pixels
-    data = compress convert data
-    @sp.write data
+    pixels = compress convert pixels
+    @sp.write pixels
   end
   
   # Disconnect serial port
@@ -36,8 +36,7 @@ class Propeller::Transmitter
     # @return [Array] - Flatten thirds of decimal r,g,b values
     def convert data
       data.transpose.flatten.map do |pixel| 
-        pixel = pixel.to_i(16)/256
-        pixel.to_s(16).rjust(6,'0').scan(/.{2}/).first(3).map { |b| b.to_i(16) }
+        (pixel/256).to_s(16).rjust(6,'0').scan(/.{2}/).first(3).map { |b| b.to_i(16) }
       end.flatten
     end
    
