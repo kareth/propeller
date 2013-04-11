@@ -4,3 +4,4 @@ doc/
 app/tmp/*
 !app/tmp/.dontignore
 bluetooth.sh
+preview.png
