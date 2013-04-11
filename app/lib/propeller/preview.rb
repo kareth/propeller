@@ -20,18 +20,23 @@ class Preview
 
     center = radius,radius
     commands = [] # Commands buffer
-
+    
+    angles = pixels[0].size
+    angle_step = 360.0/angles
+    
     step = radius.to_f / OUTER
     pixels.each do |circle|
       puts "radius: #{radius}"
-      circle.rotate! 180
-      circle.each_with_index do |pixel, alfa|
+      circle.rotate!(angles/2)
+      alfa = 0
+      circle.each_with_index do |pixel|
+        alfa = (alfa + angle_step) % 360
 
         rgba = pixel.to_s(16).rjust 8, '0'
         # Fill color with '0' from left side
 
         rad1 = alfa.to_f * Math::PI / 180
-        rad2 = (alfa+1).to_f * Math::PI / 180
+        rad2 = (alfa+angle_step).to_f * Math::PI / 180
         start_point = [radius.to_f * Math.sin(rad1) + center[0], radius.to_f * Math.cos(rad1) + center[1]]
         end_point = [radius.to_f * Math.sin(rad2) + center[0], radius.to_f * Math.cos(rad2) + center[1]]
 
