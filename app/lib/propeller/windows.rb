@@ -109,7 +109,7 @@ class Propeller::Windows < Qt::Application
       
       # Radius
       diameter_layout = Qt::HBoxLayout.new
-      diameter_layout.addWidget Qt::Label.new "diameter"
+      diameter_layout.addWidget Qt::Label.new "Diameter"
       @diameter = Qt::LineEdit.new
       diameter_layout.addWidget @diameter
       settings_layout.addLayout diameter_layout
@@ -175,10 +175,12 @@ class Propeller::Windows < Qt::Application
     # Triggered on change image button click
     def change_image
       path = @image_dialog.getOpenFileName
-      @interface.reload_image path, { :y => @y_offset.text.to_i, 
-                                      :x => @x_offset.text.to_i,
-                                      :s => @diameter.text.to_i,
-                                      :a => @angles.text.to_i }
+      params = {}
+      params[:y] = @y_offset.text.to_i unless @y_offset.text.empty?
+      params[:x] = @x_offset.text.to_i unless @x_offset.text.empty?
+      params[:s] = @diameter.text.to_i unless @diameter.text.empty?
+      params[:a] = @angles.text.to_i unless @angles.text.empty?
+      @interface.reload_image path, params
       #load_preview path
     end
 
