@@ -7,17 +7,18 @@ class Preview
   # @param pixels [Array] Matrix of pixels generated to be displayed on robot
   # @param radius [Integer] Size of output image
   # @return [String] Absolute path to preview image
-  def generate pixels, radius=200
+  def generate array, radius=200
     bg_path = File.expand_path("../../assets/preview_bg.png", Pathname(__FILE__).dirname.realpath)
     preview = MiniMagick::Image.open(bg_path)
 
+    pixels = array.clone
+    
     pixels.reverse!
 
     # White hole
     pixels << ["ffffffff".to_i(16)]*360
 
     center = radius,radius
-
     commands = [] # Commands buffer
 
     step = radius.to_f / OUTER
