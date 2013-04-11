@@ -25,6 +25,7 @@ GEM
     rsvg2 (1.2.5)
       cairo (>= 1.10.0)
       gdk_pixbuf2 (>= 1.2.5)
+    serialport (1.1.0)
     subexec (0.2.2)
     yard (0.8.5.2)
 
@@ -38,4 +39,5 @@ DEPENDENCIES
   redcarpet
   rspec
   rsvg2 (~> 1.2.3)
+  serialport
   yard

@@ -44,7 +44,7 @@ class Propeller::Transmitter
    
     # Compress array of r,g,b values to 8bit values ready to send to propeller
     # @param data [Array] - array of decimal r,g,b values
-    # @retrun [Array] - array of 8bit values ready to send to propeller 
+    # @return [Array] - array of 8bit values ready to send to propeller 
     def compress data
       data.map { |v| upscale(v).to_s(2).rjust(12, '0')}.join.scan(/.{8}/).map{ |v| v.to_i(2)}
     end

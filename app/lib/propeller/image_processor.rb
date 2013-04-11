@@ -4,10 +4,9 @@ require 'propeller/dimensions'
 
 # Main image processor, converting image to matrix of pixels to display on robot
 class Propeller::ImageProcessor
-  PLACEMENT = {x: 0, y: 0, s: 200} # Default placement hash
+  PLACEMENT = {x: 0, y: 0, s: 200, a: 360} # Default placement hash
 
   def initialize
-    @angles = 360
   end
 
   # Change image to format readable by propeller display
@@ -56,7 +55,7 @@ class Propeller::ImageProcessor
   # Resize image to dimensions necessary for propeller display, so each pixel will match one led
   # @example For example if propeller takes 360 angles on 40 diods with outer radius 50 (indluding hole) it resizes it to 360x50
   def resize
-    @image.resize "#{@angles}x#{OUTER}\!"
+    @image.resize "#{@placement[:a]}x#{OUTER}\!"
   end
 
   # Reads nth row in image and convert it to array of pixels. Each pixes is represented as hex RGBA
