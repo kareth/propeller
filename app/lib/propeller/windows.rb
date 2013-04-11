@@ -40,13 +40,16 @@ class Propeller::Windows < Qt::Application
       @window.resize WINDOW_WIDTH,WINDOW_HEIGHT
       @window.setWindowTitle 'Awesome Propeller!'
       center_window
+      
+      main_layout = Qt::HBoxLayout.new
 
-      layout = Qt::HBoxLayout.new @window
-
+      layout = Qt::VBoxLayout.new @window
+      layout.addLayout main_layout
+    
       # Preview part
       preview_layout = Qt::VBoxLayout.new
       preview_layout.setAlignment Qt::AlignTop
-      layout.addLayout preview_layout
+      main_layout.addLayout preview_layout
 
       # Preview title
       preview_label = Qt::Label.new 'Preview'
@@ -61,7 +64,7 @@ class Propeller::Windows < Qt::Application
       # Settings part
       settings_layout = Qt::VBoxLayout.new
       settings_layout.setAlignment Qt::AlignTop
-      layout.addLayout settings_layout
+      main_layout.addLayout settings_layout
 
       # Settings title
       settings_label = Qt::Label.new 'Settings'
@@ -69,9 +72,9 @@ class Propeller::Windows < Qt::Application
       settings_layout.addWidget settings_label
 
       # Propeller connection
-      propeller_label = Qt::Label.new "Device"
-      propeller_label.setStyleSheet "QLabel { font-style: italic; font-size: 0.9em; margin-bottom: #{MARGIN}px; }"
-      settings_layout.addWidget propeller_label
+#      propeller_label = Qt::Label.new "Device"
+#      propeller_label.setStyleSheet "QLabel { font-style: italic; font-size: 0.9em; margin-bottom: #{MARGIN}px; }"
+#      settings_layout.addWidget propeller_label
 
       device_layout = Qt::HBoxLayout.new 
       port_label = Qt::Label.new "Device port"
@@ -103,12 +106,27 @@ class Propeller::Windows < Qt::Application
       y_layout.addWidget @y_offset
       y_layout.addWidget Qt::Label.new "px"
       settings_layout.addLayout y_layout
+      
+      # Radius
+      diameter_layout = Qt::HBoxLayout.new
+      diameter_layout.addWidget Qt::Label.new "diameter"
+      @diameter = Qt::LineEdit.new
+      diameter_layout.addWidget @diameter
+      settings_layout.addLayout diameter_layout
+      
+      # Angles
+      angles_layout = Qt::HBoxLayout.new
+      angles_layout.addWidget Qt::Label.new "Angles number"
+      @angles = Qt::LineEdit.new
+      angles_layout.addWidget @angles
+      settings_layout.addLayout angles_layout
+      
 
 
       # Source
-      source_label = Qt::Label.new 'Source'
-      source_label.setStyleSheet "QLabel { font-style: italic; font-size: 0.9em; margin: #{MARGIN}px 0; }"
-      settings_layout.addWidget source_label
+#      source_label = Qt::Label.new 'Source'
+#      source_label.setStyleSheet "QLabel { font-style: italic; font-size: 0.9em; margin: #{MARGIN}px 0; }"
+#      settings_layout.addWidget source_label
 
       # Image
       @image_button = Qt::PushButton.new 'Load image from file', @window
@@ -141,7 +159,7 @@ class Propeller::Windows < Qt::Application
       # Send to propeller
       @send_button = Qt::PushButton.new 'Send to propeller', @window
       Qt::Object.connect(@send_button, SIGNAL(:clicked), self, SLOT(:send_data))
-      settings_layout.addWidget @send_button
+      layout.addWidget @send_button
 
       @window.show
     end
@@ -157,7 +175,10 @@ class Propeller::Windows < Qt::Application
     # Triggered on change image button click
     def change_image
       path = @image_dialog.getOpenFileName
-      @interface.reload_image path, { :y => @y_offset.text.to_i, :x => @x_offset.text.to_i }
+      @interface.reload_image path, { :y => @y_offset.text.to_i, 
+                                      :x => @x_offset.text.to_i,
+                                      :s => @diameter.text.to_i,
+                                      :a => @angles.text.to_i }
       #load_preview path
     end
 
